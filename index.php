@@ -1,43 +1,46 @@
 
 <?php 
-function get_random_string($valid_chars, $length)
-{
-    $random_string = "";
-    $num_valid_chars = strlen($valid_chars);
-    for ($i = 0; $i < $length; $i++)
-    {
-        $random_pick = mt_rand(1, $num_valid_chars);
-        $random_char = $valid_chars[$random_pick-1];
-        $random_string .= $random_char;
-    }
-    return $random_string;
-}
 
-function incoming_files() {
-  $files = $_FILES;
-  $files2 =array();
-  foreach ($files as $input => $infoArr) {
-      $filesByInput =array();
-      foreach ($infoArr as $key => $valueArr) {
-          if (is_array($valueArr)) {
-              foreach($valueArr as $i=>$value) {
-                  $filesByInput[$i][$key] = $value;
+if(isset($_POST['submit'])){
+    
+    function get_random_string($valid_chars, $length)
+    {
+        $random_string = "";
+        $num_valid_chars = strlen($valid_chars);
+        for ($i = 0; $i < $length; $i++)
+        {
+            $random_pick = mt_rand(1, $num_valid_chars);
+            $random_char = $valid_chars[$random_pick-1];
+            $random_string .= $random_char;
+        }
+        return $random_string;
+    }
+
+    function incoming_files() {
+      $files = $_FILES;
+      $files2 =array();
+      foreach ($files as $input => $infoArr) {
+          $filesByInput =array();
+          foreach ($infoArr as $key => $valueArr) {
+              if (is_array($valueArr)) {
+                  foreach($valueArr as $i=>$value) {
+                      $filesByInput[$i][$key] = $value;
+                  }
+              }
+              else {
+                  $filesByInput[] = $infoArr;
+                  break;
               }
           }
-          else {
-              $filesByInput[] = $infoArr;
-              break;
-          }
+          $files2 = array_merge($files2,$filesByInput);
       }
-      $files2 = array_merge($files2,$filesByInput);
-  }
-  $files3 = array();
-  foreach($files2 as $file) {
-      if (!$file['error']) $files3[] = $file;
-  }
-  return $files3;
-}
-if(isset($_POST['submit'])){
+      $files3 = array();
+      foreach($files2 as $file) {
+          if (!$file['error']) $files3[] = $file;
+      }
+      return $files3;
+    }
+    
     echo " Form Posted <br/>";
     $tmpFiles = incoming_files();
 
